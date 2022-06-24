@@ -1,0 +1,8 @@
+{
+  "NodeKey": "",
+  "ConsensusPubkey": "",
+  "ProposalAddress": "",
+  "Commission": 20,
+  "InitStake": 100000,
+  "Desc": "Validator1"
+}
