@@ -23,4 +23,5 @@ import "github.com/polynetwork/gov-tool/framework"
 //TestCase list
 func init() {
 	framework.TFramework.RegCase("CreateValidator", CreateValidator)
+	framework.TFramework.RegCase("ChangeEpoch", ChangeEpoch)
 }

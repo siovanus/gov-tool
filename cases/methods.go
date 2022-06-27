@@ -23,6 +23,7 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/contracts/native/go_abi/node_manager_abi"
+	"github.com/ethereum/go-ethereum/contracts/native/governance/node_manager"
 	"github.com/ethereum/go-ethereum/contracts/native/utils"
 	"github.com/polynetwork/gov-tool/framework"
 	"github.com/polynetwork/gov-tool/log"
@@ -75,6 +76,38 @@ func CreateValidator(ctx *framework.FrameworkContext) bool {
 	err = CallZionNative(ctx.Z, signer, utils.NodeManagerContractAddress, txData, 1)
 	if err != nil {
 		log.Errorf("CreateValidator, scmAbi.Pack error:" + err.Error())
+		return false
+	}
+	return true
+}
+
+type ChangeEpochParam struct {
+	NodeKey         string
+}
+
+func ChangeEpoch(ctx *framework.FrameworkContext) bool {
+	data, err := ioutil.ReadFile("./params/ChangeEpoch.json")
+	if err != nil {
+		log.Error(err)
+		return false
+	}
+	changeEpochParam := new(ChangeEpochParam)
+	err = json.Unmarshal(data, changeEpochParam)
+	if err != nil {
+		log.Error(err)
+		return false
+	}
+	signer, err := zion.NewZionSigner(changeEpochParam.NodeKey)
+	if err != nil {
+		log.Error(err)
+		return false
+	}
+
+	param := node_manager.ChangeEpochParam{}
+	txData, err := param.Encode()
+	err = CallZionNative(ctx.Z, signer, utils.NodeManagerContractAddress, txData, 1)
+	if err != nil {
+		log.Errorf("EpochChange, scmAbi.Pack error:" + err.Error())
 		return false
 	}
 	return true
